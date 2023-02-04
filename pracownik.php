@@ -4,47 +4,55 @@ unset($_SESSION["wiadomosc"]);
 
 $imię = $_POST["imię"];
 $nazwisko = $_POST["nazwisko"];
-$specjalność = $_POST["specjalność"];
+$nazwaspecjalności = explode(" ", $_POST["specjalność"]);
 $hasło = $_POST["hasło"];
 $czykierownik = $_POST["czyKierownik"];
 if (strlen($imię) > 20 or strlen($imię) == 0){
-	$wiadomosc = "niepoprawna długość imienia" . "<br />";
+	$wiadomosc = "Niepoprawna długość imienia" . "<br />";
 }
 if (strlen($nazwisko) > 30 or strlen($nazwisko) == 0) {
-	$wiadomosc .= "niepoprawna długość nazwiska" . "<br />";
+	$wiadomosc .= "Niepoprawna długość nazwiska" . "<br />";
 }
 if (strlen(sha1($hasło)) > 50 or strlen($hasło) < 8) {
-	$wiadomosc .= "wybierz inne hasło (co najmniej 8 znaków)" . "<br />";
+	$wiadomosc .= "Wybierz inne hasło (co najmniej 8 znaków)" . "<br />";
 }
 if ($czykierownik != 'f' & $czykierownik != 't') {
-	$wiadomosc .= "złe dane w polu: czy Kierownik";
+	$wiadomosc .= "Złe dane w polu: czy Kierownik";
 }
 if(!isset($wiadomosc)){
-	$dbconn = pg_connect("host=localhost port=5432 dbname=ogród user=postgres password=test123");
-	$id = pg_fetch_row(pg_query($dbconn, "select(SELECT id FROM pracownicy WHERE id=(SELECT max(id) FROM pracownicy))+1"))[0];
-	$czyspec = pg_fetch_row(pg_query($dbconn, "select id from specjalnosci where id= '".$specjalność."'"))[0];
-	if($czyspec == $specjalność){
-		$wynik = pg_query($dbconn, "insert into Pracownicy Values (default, '".pg_escape_string($imię) .
-																			"', '". pg_escape_string($nazwisko) .
-																			"', '". sha1($hasło).
-																			"','". $czykierownik .
-																			"')");
-																			
-		$query = "INSERT INTO specjalnoscipracownikow VALUES($1, $2)"; 
+	$dbconn = pg_connect("host=localhost port=5432 dbname=ogród user=postgres password=test123")
+				or die("Could not connect to server\n");
+	$czyspec= True;
+	for ($i = 0; $i < count($nazwaspecjalności); $i++) {
+		$tmp = pg_fetch_row(pg_query($dbconn, "select nazwa from specjalnosci where nazwa= '".$nazwaspecjalności[$i]."'"))[0];
+		if($tmp != $nazwaspecjalności[$i]){
+			$czyspec = False;
+			break;
+			}
+	}
+	if($czyspec){
+		$query0 = "INSERT INTO pracownicy(imie, nazwisko, password, czykierownik) VALUES ($1, $2, $3, $4)";	
+		pg_prepare($dbconn, "prepare0", $query0) 
+			or die ("Cannot prepare statement -1\n"); 
 
-		pg_prepare($dbconn, "prepare1", $query) 
-			or die ("Cannot prepare statement\n"); 
+		pg_execute($dbconn, "prepare0", array($imię, $nazwisko, sha1($hasło), $czykierownik))
+			or die("Cannot execute statement -1\n");
+									
+		$query1 = "INSERT INTO specjalnoscipracownikow VALUES($1, $2)"; 
+		$pracownik_id = pg_fetch_row(pg_query($dbconn, "SELECT(SELECT id FROM pracownicy WHERE id=(SELECT max(id) FROM pracownicy))"))[0];
+		for ($i = 0; $i < count($nazwaspecjalności); $i++) {
+			$specjalność_id = pg_fetch_row(pg_query($dbconn, "SELECT id FROM specjalnosci WHERE nazwa = '". $nazwaspecjalności[$i] ."'"))[0];
+			pg_prepare($dbconn, "prepare'". $i ."'", $query1) 
+				or die ("Cannot prepare statement '".$i."'\n"); 
 
-		pg_execute($dbconn, "prepare1", array($specjalność, $id));
-		   
-		pg_close($dbconn);
-							
-
-		if (!isset($wiadomosc)) {
-		  $wiadomosc = "Udało się wprowadzić pracownika do bazy danych";	
+			pg_execute($dbconn, "prepare'".$i."'", array($specjalność_id, $pracownik_id))
+				or die("Cannot execute statement '".$i."'\n");
 		}
-	}	else{
-		$wiadomosc="Nie udało się: nie istnieje specjalność o podanym ID";
+		
+		pg_close($dbconn);
+		$wiadomosc = "Udało się wprowadzić pracownika do bazy danych";	
+	}else{
+		$wiadomosc="Nie istnieje specjalność o podanej nazwie";
 		}
 	
 }

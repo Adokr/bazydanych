@@ -49,7 +49,7 @@ body {
 .specjalność {
 	display: none;
 	}
-.projekt {
+.praca {
 	display: none;
 	}
 .zadanie {
@@ -89,7 +89,7 @@ body {
 			?>
 <script>
 window.onload = function () {
-            setTimeout(appeardiv,3500);
+            setTimeout(appeardiv,4000);
         }
         function appeardiv() {
             document.getElementById('msg').style.display= "none";
@@ -113,7 +113,7 @@ function SetActiveDiv(e){
 	document.getElementById("Wprowadź nowy obszar").classList.add("obszar");
 	document.getElementById("Wprowadź nowego pracownika").classList.add("pracownik");
 	document.getElementById("Wprowadź nową specjalność").classList.add("specjalność");
-	document.getElementById("Wprowadź nowy projekt").classList.add("projekt");
+	document.getElementById("Wprowadź nową pracę").classList.add("praca");
 	document.getElementById("Wprowadź nowe zadanie").classList.add("zadanie");
   showhide(e);
 }
@@ -133,7 +133,7 @@ function kliknij(x){
 	div.classList.remove('obszar');
 	div.classList.remove('pracownik');
 	div.classList.remove('specjalność');
-	div.classList.remove('projekt');
+	div.classList.remove('praca');
 	div.classList.remove('zadanie');
 	var tabz = document.getElementById("aha").querySelectorAll(".anybutton");
     [].forEach.call(tabz, function(y) {
@@ -148,21 +148,21 @@ function kliknij(x){
 		<input id="obszar" class="anybutton" type="button" value="Wprowadź nowy obszar" style="left:40%;" onclick="kliknij(this);"></input>
 		<input id="pracownik" class="anybutton" type="button" value="Wprowadź nowego pracownika" style="left:75%;" onclick="kliknij(this);"></input>
 		<input id="specjalność" class="anybutton" type="button" value="Wprowadź nową specjalność" style="left:5%; top: 45%" onclick="kliknij(this);"></input>
-		<input id="projekt" class="anybutton" type="button" value="Wprowadź nowy projekt" style="left: 40%; top: 45%" onclick="kliknij(this);"></input>
+		<input id="praca" class="anybutton" type="button" value="Wprowadź nową pracę" style="left: 40%; top: 45%" onclick="kliknij(this);"></input>
 		<input id="zadanie" class="anybutton" type="button" value="Wprowadź nowe zadanie" style="left: 75%; top: 45%" onclick="kliknij(this);"></input>
 		
 		<div id="Wprowadź nową lokalizację" class="lokal">
 			<FORM action="lokalizacje.php" method=POST>
 				<p>Wpisz dane lokalizacji, którą chcesz wprowadzić do bazy danych</p>
-				<p>Nazwa: <input type=text name= "nazwaLokalizacji"><br>
+				<p>Nazwa lokalizacji: <input type=text name= "nazwaLokalizacji"><br>
 				<button type="submit" value="gotowe" name="gotowe"><b>Gotowe</b></button>
 			</FORM>
 		</div>
 		<div id="Wprowadź nowy obszar" class="obszar">
 			<FORM action="obszar.php" method=POST>
-				<p>Wpisz dane lokalizacji którą chcesz wprowadzić do bazy danych</p>
-				<p>Nazwa: <input type=text name= "nazwaObszaru"><br>
-				<p>Podaj ID lokalizacji, w której skład ma wchodzić obszar: <input type=text name= "idLokalizacji"><br>
+				<p>Wpisz dane obszaru, który chcesz wprowadzić do bazy danych</p>
+				<p>Nazwa obszaru: <input type=text name= "nazwaObszaru"><br>
+				<p>Podaj nazwę lokalizacji, w której skład ma wchodzić obszar: <input type=text name= "nazwaLokalizacji"><br>
 				<button type="submit" value="gotowe" name="gotowe"><b>Gotowe</b></button>
 			</FORM>
 		</div>
@@ -171,7 +171,7 @@ function kliknij(x){
 				<p>Wpisz dane pracownika, którego chcesz wprowadzić do bazy danych</p>
 				<p>Imię: <input type=text name= "imię"><br>
 				<p>Nazwisko: <input type=text name= "nazwisko"><br>
-				<p>Specjalność: <input type=text name= "specjalność"><br>
+				<p>Nazwy specjalności (oddzielone spacjami): <input type=text name= "specjalność"><br>
 				<p>Hasło (co najmniej 8 znaków): <input type=password name= "hasło"><br>
 				<p>Czy dać uprawnienia kierownika (f/t): <input type=text name= "czyKierownik"><br>
 				<button type="submit" value="gotowe" name="gotowe"><b>Gotowe</b></button>
@@ -180,30 +180,41 @@ function kliknij(x){
 		<div id="Wprowadź nową specjalność" class="specjalność">
 			<FORM action="specjalnosc.php" method=POST>
 				<p>Wpisz dane specjalności, którą chcesz wprowadzić do bazy danych</p>
-				<p>Nazwa: <input type=text name= "nazwaSpecjalności"><br>
+				<p>Nazwa specjalności: <input type=text name= "nazwaSpecjalności"><br>
 				<button type="submit" value="gotowe" name="gotowe"><b>Gotowe</b></button>
 			</FORM>
 		</div>
-		<div id="Wprowadź nowy projekt" class="projekt">
-			<FORM action="projekt.php" method=POST>
-				<p>Wpisz dane projektu, który chcesz wprowadzić do bazy danych</p>
-				<p>Nazwa: <input type=text name= "nazwaProjektu"><br>
+		<div id="Wprowadź nową pracę" class="praca">
+			<FORM action="prace.php" method=POST>
+				<p>Wpisz dane pracy, którą chcesz wprowadzić do bazy danych</p>
+				<p>Nazwa pracy: <input type=text name= "nazwaPracy"><br>
 				<p>Termin ukończenia: <input type=date name= "terminUkończenia"><br>
-				<p>ID obszaru, którego dotyczy projekt: <input type=text name= "idObszaru"><br>
-				<p>ID rodzaju projektu: <input type=text name="rodzajProjektu"></p>
+				<p>Nazwa obszaru, którego dotyczy praca: <input type=text name= "nazwaObszaru"><br>
 				<button type="submit" value="gotowe" name="gotowe"><b>Gotowe</b></button>
 			</FORM>
 		</div>
 		<div id="Wprowadź nowe zadanie" class="zadanie">
 			<FORM action="zadanie.php" method=POST>
-				<p>Wpisz dane lokalizacji którą chcesz wprowadzić do bazy danych</p>
-				<p>Nazwa: <input type=text name= "nazwaaa"><br>
+				<p>Wpisz dane zadania, które chcesz wprowadzić do bazy danych</p>
+				<p>Nazwa: <input type=text name= "nazwaZadania"><br>
+				<p>Termin zadania: <input type=date name="terminZadania"><br>
+				<p>Nazwa pracy, której częścią będzie zadanie: <input type=text name="nazwaPracy"><br>
+				<p>Typ zadania: <input type=text name="specjalność"></p>
 				<button type="submit" value="gotowe" name="gotowe"><b>Gotowe</b></button>
 			</FORM>
 		</div>
 	</div>	
 
 	<div id="#obsada" class="tab lol">
+		<div id="Ustal obsadę zadania" class="obsada">
+			<FORM action="obsada.php" method=POST>
+				<p>Podaj dane pracy, której obsadę chcesz ustalić</p>
+				<p>Nazwa oraz ID pracy (np. praca1 1): <input type=text name= "praca"><br>
+				<p>Podaj dane pracowników, których chcesz przyporządkować temu zadaniu</p>
+				<p>ID oraz nazwiska pracowników (np. 8 Kowalski, 9 Nowak, 1 Filipkowski): <input type=text name="pracownicy"></p>
+				<button type="submit" value="gotowe" name="gotowe"><b>Gotowe</b></button>
+			</FORM>
+		</div>
 	</div>
 	<div id="#termin" class="tab lol">
 	</div>
@@ -215,10 +226,11 @@ function kliknij(x){
 		  print("Connection Failed.");
 		  exit;
 		}
-		$result = pg_query($link, "select pracownicy.id, imie, nazwisko, password, wow.nazwa as spec, czykierownik from pracownicy 
-									left join (select * from specjalnosci 
-									left join specjalnoscipracownikow on specjalnosci.id=specjalnoscipracownikow.specjalnosci_id) as wow  
-									on pracownicy.id=wow.pracownicy_id order by id;");
+		$result = pg_query($link, "select pracownicy.id, imie, nazwisko, password, czykierownik, STRING_AGG(wow.nazwa::character varying, ', ')
+								   as specjalności from pracownicy 
+								   left join (select * from specjalnosci 
+								   left join specjalnoscipracownikow on specjalnosci.id=specjalnoscipracownikow.specjalnosci_id) as wow                                                          on pracownicy.id=wow.pracownicy_id group by pracownicy.id order by id;
+								   ");
 		$numrows = pg_numrows($result);
 		?>
 
@@ -230,7 +242,7 @@ function kliknij(x){
 		 <th>Imię</th>
 		 <th>Nazwisko</th>
 		 <th>Hasło</th>
-		 <th>Specjalność</th>
+		 <th>Specjalności</th>
 		 <th>Kierownik</th>
 		</tr>
 		<?php
@@ -241,7 +253,7 @@ function kliknij(x){
 		 <td>" . $row["imie"] . "</td>
 		 <td>" . $row["nazwisko"] . "</td>
 		 <td>" . $row["password"] . "</td>
-		 <td>" . $row["spec"]. "</td>
+		 <td>" . $row["specjalności"]. "</td>
 		 <td>" . strtoupper($row["czykierownik"]) . "</td>
 		</tr>
 		";
@@ -320,18 +332,18 @@ function kliknij(x){
 		?>
 		</table>
 			<?php
-			$result = pg_query($link, "select projekty.id as id_projektu, projekty.nazwa as nazwa_projektu, termin_ukończenia,
+			$result = pg_query($link, "select prace.id as id_pracy, prace.nazwa as nazwa_pracy, termin_ukończenia,
 										obszary.nazwa as nazwa_obszaru
-										from projekty left join obszary on projekty.obszary_id = obszary.id;
+										from prace left join obszary on prace.obszary_id = obszary.id;
 										");
 			$numrows = pg_numrows($result);
 		?>
-		<h2 align="center">Projekty</h2>
+		<h2 align="center">Prace</h2>
 
 		<table border="1" align=center>
 		<tr>
 		 <th>ID</th>
-		 <th>Nazwa Projektu</th>
+		 <th>Nazwa Pracy</th>
 		 <th>Termin Ukończenia</th>
 		 <th>Nazwa Obszaru</th>
 		</tr>
@@ -339,14 +351,49 @@ function kliknij(x){
 		  for ($ri = 0; $ri < $numrows; $ri++) {
 			echo "<tr>\n";
 			$row = pg_fetch_array($result, $ri);
-			echo " <td>" . $row["id_projektu"] . "</td>
-		 <td>" . $row["nazwa_projektu"] . "</td>
+			echo " <td>" . $row["id_pracy"] . "</td>
+		 <td>" . $row["nazwa_pracy"] . "</td>
 		 <td>" . $row["termin_ukończenia"] . "</td>
 		 <td>" . $row["nazwa_obszaru"] . "</td>
 		</tr>
 		";
 		   }
-		  pg_close($link);
+		?>
+		</table>
+		<?php
+			$result = pg_query($link, "select zadania.id, zadania.nazwa, zadania.termin, prace.nazwa as job_name, wow.nazwa as nazwaspec, zadania.pracownicy_id as pracownik_id
+									   from zadania left join prace on prace.id=zadania.prace_id
+									   left join (select * from rodzajzadania left join specjalnosci on specjalnosci_id=specjalnosci.id) as wow
+									   on zadania.id=wow.zadania_id;");
+
+			$numrows = pg_numrows($result);
+		?>
+
+		<h2 align="center">Zadania</h2>
+
+		<table border="1" align=center>
+		<tr>
+		 <th>ID</th>
+		 <th>Nazwa</th>
+		 <th>Termin</th>
+		 <th>Praca</th>
+		 <th>Specjalność</th>
+		 <th>Pracownicy</th>
+		</tr>
+		<?php
+		  for ($ri = 0; $ri < $numrows; $ri++) {
+			echo "<tr>\n";
+			$row = pg_fetch_array($result, $ri);
+			echo " <td>" . $row["id"] . "</td>
+		 <td>" . $row["nazwa"] . "</td>
+		 <td>" . $row["termin"] . "</td>
+		 <td>" . $row["job_name"] . "</td>
+		 <td>" . $row["nazwaspec"]. "</td>
+		 <td>" . $row["pracownik_id"]. "</td>
+		</tr>
+		";
+		   }
+		   pg_close($link)
 		?>
 		</table>
 	</div>
